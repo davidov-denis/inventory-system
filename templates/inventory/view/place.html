@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="table-responsive">
+        {% if empty %}
+            <p class="text-center font-weight-bold">Помещения не существует или не добавлен инвентарь</p>
+        {% endif %}
+        <table class="table table-bordered table-hover table-reflow">
+            <thead>
+                <tr>
+                    <th>Номер категории</th>
+                    <th>Название категории</th>
+                    <th>Номер товара</th>
+                    <th>Название товара</th>
+                    <th>Местонахождение</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dat in data %}
+                    <tr>
+                        <td>{{ dat[0] }}</td>
+                        <td>{{ dat[1] }}</td>
+                        <td>{{ dat[2] }}</td>
+                        <td>{{ dat[3] }}</td>
+                        <td>{{ dat[4] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
