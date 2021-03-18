@@ -14,7 +14,7 @@ def users(username):
 def from_db_order_by_category(category):
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    sql = 'SELECT category, categoryName, number, name, place FROM inventory WHERE category="{}" OR categoryName="{}"'.format(category, category)
+    sql = 'SELECT * FROM inventory WHERE category="{}" OR categoryName="{}"'.format(category, category)
     data = cur.execute(sql).fetchall()
     cur.close()
     conn.close()
@@ -24,7 +24,7 @@ def from_db_order_by_category(category):
 def from_db_order_by_place(place):
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    sql = 'SELECT category, categoryName, number, name, place FROM inventory WHERE place="{}"'.format(place)
+    sql = 'SELECT * FROM inventory WHERE place="{}"'.format(place)
     print(sql)
     data = cur.execute(sql).fetchall()
     cur.close()
@@ -35,7 +35,7 @@ def from_db_order_by_place(place):
 def from_db():
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    data = cur.execute("SELECT category, categoryName, number, name, place FROM inventory").fetchall()
+    data = cur.execute("SELECT *  FROM inventory").fetchall()
     cur.close()
     conn.close()
     return data
@@ -44,6 +44,6 @@ def from_db():
 def to_db(category, categoryName, number, number_name, place):
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    cur.execute("INSERT INTO inventory VALUES (?, ?, ?, ?, 0, ?)", (category, categoryName, number, number_name, place))
+    cur.execute("INSERT INTO inventory VALUES (?, ?, ?, ?, ?)", (category, categoryName, number, number_name, place))
     conn.commit()
     conn.close()

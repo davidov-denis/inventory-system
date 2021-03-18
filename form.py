@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, SelectField, SubmitField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, EqualTo, Length
 
 
 class InventoryForm(FlaskForm):
@@ -16,3 +16,20 @@ class CustomLoginForm(FlaskForm):
     name = StringField("Имя пользователя", validators=[DataRequired()])
     password = PasswordField("Пароль", validators=[DataRequired()])
     submit = SubmitField("Войти")
+
+
+class UserUpdateInfo(FlaskForm):
+    new_password = PasswordField("Новый пароль", validators=[DataRequired(), Length(min=5)])
+    new_password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired(), EqualTo(new_password)])
+    submit = SubmitField("Обновить пароль")
+
+
+class RegisterNewUser(FlaskForm):
+    name = StringField("Имя пользователя", validators=[DataRequired()])
+    password = PasswordField("Новый пароль", validators=[DataRequired(), Length(min=5, message="Пароль слишком короткий"), EqualTo("password_repeat", message="Пароли не совпадают")])
+    password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
+    can_view = BooleanField("Просмотр данных")
+    can_add = BooleanField("Добавление данных")
+    can_delete = BooleanField("Удаление данных")
+    can_add_users = BooleanField("Добавление пользователей")
+    submit = SubmitField("Добавить")
