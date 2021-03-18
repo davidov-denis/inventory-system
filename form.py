@@ -8,7 +8,11 @@ class InventoryForm(FlaskForm):
     categoryName = StringField("Название категории", validators=[DataRequired()])
     number = StringField("Номер товара", validators=[DataRequired()])
     number_name = StringField("Название товара", validators=[DataRequired()])
-    place = SelectField("Место", choices=[("Администратор", "Администратор"), ("Раздевалка", "Раздевалка"), ("Оранжевый класс", "Оранжевый класс"), ("Зелёный класс", "Зелёный класс"), ("Инженерный стелаж", "Инженерный стелаж")], validators=[DataRequired()])
+    place = SelectField("Место", choices=[("Администратор", "Администратор"),
+                                          ("Раздевалка", "Раздевалка"),
+                                          ("Оранжевый класс", "Оранжевый класс"),
+                                          ("Зелёный класс", "Зелёный класс"),
+                                          ("Инженерный стелаж", "Инженерный стелаж")], validators=[DataRequired()])
     submit = SubmitField("Подтвердить")
 
 
@@ -26,7 +30,9 @@ class UserUpdateInfo(FlaskForm):
 
 class RegisterNewUser(FlaskForm):
     name = StringField("Имя пользователя", validators=[DataRequired()])
-    password = PasswordField("Новый пароль", validators=[DataRequired(), Length(min=5, message="Пароль слишком короткий"), EqualTo("password_repeat", message="Пароли не совпадают")])
+    password = PasswordField("Новый пароль", validators=[DataRequired(),
+                                                         Length(min=5, message="Пароль слишком короткий"),
+                                                         EqualTo("password_repeat", message="Пароли не совпадают")])
     password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
     can_view = BooleanField("Просмотр данных")
     can_add = BooleanField("Добавление данных")

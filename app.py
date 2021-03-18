@@ -52,10 +52,7 @@ def register():
             can_add = "true" if form.can_add.data else "false"
             can_delete = "true" if form.can_delete.data else "false"
             can_add_users = "true" if form.can_add_users.data else "false"
-            print(can_view)
-            print(can_add)
-            print(can_delete)
-            print(can_add_users)
+            add_user(name, password, can_view, can_add, can_delete, can_add_users)
         return render_template("/user/register.html", form=form)
     else:
         return redirect("/login/")
@@ -69,19 +66,22 @@ def logout():
 
 @app.route("/login/", methods=["post", "get"])
 def login():
-    form = CustomLoginForm()
-    if form.validate_on_submit():
-        name = form.name.data
-        password = hashlib.md5(str(form.password.data).encode())
-        password = password.hexdigest()
-        user = users(username=name)[0]
-        if len(user) == 0:
-            print("нет пользователя")
-        else:
-            if user[1] == password:
-                update_session(user)
-                return redirect("/user/")
-    return render_template("/user/login.html", form=form)
+    if is_auth():
+        return redirect("/user/")
+    else:
+        form = CustomLoginForm()
+        if form.validate_on_submit():
+            name = form.name.data
+            password = hashlib.md5(str(form.password.data).encode())
+            password = password.hexdigest()
+            user = users(username=name)[0]
+            if len(user) == 0:
+                print("нет пользователя")
+            else:
+                if user[1] == password:
+                    update_session(user)
+                    return redirect("/user/")
+        return render_template("/user/login.html", form=form)
 
 
 @app.route('/inventory/', methods=["get", "post"])

@@ -1,10 +1,19 @@
 import sqlite3
 
 
+def add_user(name, password, can_view, can_add, can_delete, can_add_users):
+    conn = sqlite3.connect("db.sqlite")
+    cur = conn.cursor()
+    sql = f'INSERT INTO users VALUES ("{name}", "{password}", "{can_view}", "{can_add}", "{can_delete}", "{can_add_users}")'
+    cur.execute(sql)
+    cur.close()
+    conn.commit()
+
+
 def users(username):
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    sql = 'SELECT name, password, can_view, can_add, can_delete, can_add_users FROM users WHERE name="{}"'.format(username)
+    sql = 'SELECT * FROM users WHERE name="{}"'.format(username)
     data = cur.execute(sql).fetchall()
     cur.close()
     conn.close()
