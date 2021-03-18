@@ -10,8 +10,8 @@ import sqlite3
 # print(a)
 
 
-# conn = sqlite3.connect("db.sqlite")
-# cur = conn.cursor()
-# a = cur.execute("SELECT * FROM users").fetchall()
-# print(a)
-# conn.close()
+conn = sqlite3.connect("db.sqlite")
+cur = conn.cursor()
+a = cur.execute("SELECT * FROM users").fetchall()
+print(a)
+conn.close()

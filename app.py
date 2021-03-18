@@ -42,18 +42,22 @@ def user():
 
 @app.route("/register/", methods=["post", "get"])
 def register():
-    if is_auth() and session.get("can_add_users") == "true":
+    if is_auth():
         form = RegisterNewUser()
-        if form.validate_on_submit():
-            name = form.name.data
-            password = hashlib.md5(str(form.password.data).encode())
-            password = password.hexdigest()
-            can_view = "true" if form.can_view.data else "false"
-            can_add = "true" if form.can_add.data else "false"
-            can_delete = "true" if form.can_delete.data else "false"
-            can_add_users = "true" if form.can_add_users.data else "false"
-            add_user(name, password, can_view, can_add, can_delete, can_add_users)
-        return render_template("/user/register.html", form=form)
+        if session.get("can_add_users") == "true":
+            if form.validate_on_submit():
+                name = form.name.data
+                password = hashlib.md5(str(form.password.data).encode())
+                password = password.hexdigest()
+                can_view = "true" if form.can_view.data else "false"
+                can_add = "true" if form.can_add.data else "false"
+                can_delete = "true" if form.can_delete.data else "false"
+                can_add_users = "true" if form.can_add_users.data else "false"
+                email = form.email.data
+                add_user(name, password, can_view, can_add, can_delete, can_add_users, email)
+            return render_template("/user/register.html", form=form)
+        else:
+            render_template("non_privilege.html")
     else:
         return redirect("/login/")
 
@@ -63,9 +67,10 @@ def logout():
     delete_session()
     return redirect("/login/")
 
-
+@app.route("/", methods=["post", "get"])
 @app.route("/login/", methods=["post", "get"])
 def login():
+    print(request.path)
     if is_auth():
         return redirect("/user/")
     else:
@@ -88,16 +93,19 @@ def login():
 def inventory():
     if is_auth():
         form = InventoryForm()
-        if form.validate_on_submit():
-            category = form.category.data
-            categoryName = form.categoryName.data
-            number = form.number.data
-            number_name = form.number_name.data
-            place = form.place.data
-            to_db(category, categoryName, number, number_name, place)
-            return redirect("/")
+        if session.get("can_add") == "true":
+            if form.validate_on_submit():
+                category = form.category.data
+                categoryName = form.categoryName.data
+                number = form.number.data
+                number_name = form.number_name.data
+                place = form.place.data
+                to_db(category, categoryName, number, number_name, place)
+                return redirect("/")
+            else:
+                return render_template("/inventory/index.html", form=form, title="Внесение данных")
         else:
-            return render_template("/inventory/index.html", form=form, title="Внесение данных")
+            return render_template("non_privilege.html")
     else:
         return redirect("/login/")
 
@@ -105,11 +113,14 @@ def inventory():
 @app.route("/inventory/view/")
 def view_table():
     if is_auth():
-        data = from_db()
-        empty = False
-        if len(data) == 0:
-            empty = True
-        return render_template("/inventory/view/all.html", data=data, title="Просмотр всей таблицы", empty=empty)
+        if session.get("can_view") == "true":
+            data = from_db()
+            empty = False
+            if len(data) == 0:
+                empty = True
+            return render_template("/inventory/view/all.html", data=data, title="Просмотр всей таблицы", empty=empty)
+        else:
+            return render_template("non_privilege.html")
     else:
         return redirect("/login/")
 
@@ -117,12 +128,15 @@ def view_table():
 @app.route("/inventory/view/order-by-place/<place>/")
 def order_by_place(place):
     if is_auth():
-        empty = False
-        data = from_db_order_by_place(place)
-        if len(data) == 0:
-            empty = True
-        print(data)
-        return render_template("/inventory/view/place.html", data=data, title="Инвентарь помещения {}".format(place), empty=empty)
+        if session.get("can_view") == "true":
+            empty = False
+            data = from_db_order_by_place(place)
+            if len(data) == 0:
+                empty = True
+            print(data)
+            return render_template("/inventory/view/place.html", data=data, title="Инвентарь помещения {}".format(place), empty=empty)
+        else:
+            return render_template("non_privilege.html")
     else:
         return redirect("/login/")
 
@@ -130,11 +144,14 @@ def order_by_place(place):
 @app.route("/inventory/view/order-by-category/<category>/")
 def order_by_category(category):
     if is_auth():
-        empty = False
-        data = from_db_order_by_category(category)
-        if len(data)  == 0:
-            empty = True
-        return render_template("/inventory/view/category.html", data=data, title="Товары категории {}".format(category), empty=empty)
+        if session.get("can_view") == "true":
+            empty = False
+            data = from_db_order_by_category(category)
+            if len(data)  == 0:
+                empty = True
+            return render_template("/inventory/view/category.html", data=data, title="Товары категории {}".format(category), empty=empty)
+        else:
+            return render_template("non_privilege.html")
     else:
         return redirect("/login/")
 

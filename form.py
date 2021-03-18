@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, PasswordField, BooleanField
-from wtforms.validators import DataRequired, EqualTo, Length
-
+from wtforms.validators import DataRequired, EqualTo, Length, Email
+from wtforms.fields.html5 import EmailField
 
 class InventoryForm(FlaskForm):
     category = StringField("Номер категории", validators=[DataRequired()])
@@ -34,6 +34,7 @@ class RegisterNewUser(FlaskForm):
                                                          Length(min=5, message="Пароль слишком короткий"),
                                                          EqualTo("password_repeat", message="Пароли не совпадают")])
     password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
+    email = EmailField("Адресс электронной почты", validators=[DataRequired(), Email()])
     can_view = BooleanField("Просмотр данных")
     can_add = BooleanField("Добавление данных")
     can_delete = BooleanField("Удаление данных")
