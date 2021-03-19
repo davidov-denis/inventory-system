@@ -83,5 +83,13 @@
       <Position>7</Position>
       <DataType>text|0s</DataType>
     </column>
+    <column id="26" parent="8" name="real_name">
+      <Position>8</Position>
+      <DataType>text|0s</DataType>
+    </column>
+    <column id="27" parent="8" name="surname">
+      <Position>9</Position>
+      <DataType>text|0s</DataType>
+    </column>
   </database-model>
 </dataSource>

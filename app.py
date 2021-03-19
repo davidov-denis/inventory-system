@@ -21,6 +21,9 @@ def delete_session():
     session.pop("can_add", None)
     session.pop("can_delete", None)
     session.pop("can_add_users", None)
+    session.pop("email", None)
+    session.pop("real_name", None)
+    session.pop("surname", None)
 
 
 def update_session(user):
@@ -30,6 +33,18 @@ def update_session(user):
     session["can_add"] = user[3]
     session["can_delete"] = user[4]
     session["can_add_users"] = user[5]
+    session["email"] = user[6]
+    session["real_name"] = user[7]
+    session["surname"] = user[8]
+
+
+# @app.route("/all-users/", methods=["get", "post"])
+# def all_users():
+#     data = all_users()
+#     if request.method == "POST":
+#         name = request.form.get("name")
+#         delete_user(name)
+#     return render_template("/user/all-users.html", data=data)
 
 
 @app.route("/user/")
@@ -54,8 +69,13 @@ def register():
                 can_delete = "true" if form.can_delete.data else "false"
                 can_add_users = "true" if form.can_add_users.data else "false"
                 email = form.email.data
-                add_user(name, password, can_view, can_add, can_delete, can_add_users, email)
-            return render_template("/user/register.html", form=form)
+                real_name = form.real_name.data
+                surname = form.surname.data
+                for i in all_users():
+                    if i[0] == name or (i[8] == surname and i[7] == real_name):
+                        return redirect("/register/", user_added=True)
+                add_user(name, password, can_view, can_add, can_delete, can_add_users, email, real_name, surname)
+            return render_template("/user/register.html", form=form, user_added=False)
         else:
             render_template("non_privilege.html")
     else:
@@ -66,6 +86,7 @@ def register():
 def logout():
     delete_session()
     return redirect("/login/")
+
 
 @app.route("/", methods=["post", "get"])
 @app.route("/login/", methods=["post", "get"])
@@ -81,11 +102,13 @@ def login():
             password = password.hexdigest()
             user = users(username=name)[0]
             if len(user) == 0:
-                print("нет пользователя")
+                return redirect("/login/")
             else:
                 if user[1] == password:
                     update_session(user)
-                    return redirect("/user/")
+                    return redirect("/login/")
+                else:
+                    return redirect("/login/")
         return render_template("/user/login.html", form=form)
 
 
@@ -154,6 +177,7 @@ def order_by_category(category):
             return render_template("non_privilege.html")
     else:
         return redirect("/login/")
+
 
 if __name__ == '__main__':
     app.run()

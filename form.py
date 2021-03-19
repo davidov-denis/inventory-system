@@ -35,6 +35,8 @@ class RegisterNewUser(FlaskForm):
                                                          EqualTo("password_repeat", message="Пароли не совпадают")])
     password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
     email = EmailField("Адресс электронной почты", validators=[DataRequired(), Email()])
+    real_name = StringField("Имя", validators=[DataRequired()])
+    surname = StringField("Фамилия", validators=[DataRequired()])
     can_view = BooleanField("Просмотр данных")
     can_add = BooleanField("Добавление данных")
     can_delete = BooleanField("Удаление данных")

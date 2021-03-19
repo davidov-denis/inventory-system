@@ -4,10 +4,30 @@ import os
 path_to_db = os.getcwd() + "\\db.sqlite"
 print(path_to_db)
 
-def add_user(name, password, can_view, can_add, can_delete, can_add_users, email):
+
+def all_users():
     conn = sqlite3.connect("D:\\inventory-system\\db.sqlite")
     cur = conn.cursor()
-    sql = f'INSERT INTO users VALUES ("{name}", "{password}", "{can_view}", "{can_add}", "{can_delete}", "{can_add_users}", "{email}")'
+    sql = "SELECT * FROM users"
+    data = cur.execute(sql).fetchall()
+    cur.close()
+    conn.close()
+    return data
+
+
+def delete_user(name):
+    conn = sqlite3.connect("D:\\inventory-system\\db.sqlite")
+    cur = conn.cursor()
+    sql = f'DELETE FROM users WHERE name="{name}"'
+    cur.execute(sql)
+    cur.close()
+    conn.commit()
+
+
+def add_user(name, password, can_view, can_add, can_delete, can_add_users, email, real_name, surname):
+    conn = sqlite3.connect("D:\\inventory-system\\db.sqlite")
+    cur = conn.cursor()
+    sql = f'INSERT INTO users VALUES ("{name}", "{password}", "{can_view}", "{can_add}", "{can_delete}", "{can_add_users}", "{email}", "{real_name}", "{surname}")'
     cur.execute(sql)
     cur.close()
     conn.commit()

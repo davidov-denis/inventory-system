@@ -5,6 +5,16 @@
     <title>Вход</title>
 </head>
 <body>
+    {% if password %}
+        <script>
+            alert("Не верный пароль")
+        </script>
+    {% endif %}
+    {% if name %}
+        <script>
+            alert("Не верное имя пользователя")
+        </script>
+    {% endif %}
     <form action="" method="post">
         <div>
             {{ form.csrf_token }}
