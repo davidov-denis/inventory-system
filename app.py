@@ -63,7 +63,8 @@ def active_code(email):
         password = hashlib.md5(str(form.password.data).encode())
         password = password.hexdigest()
         if check_code(email, code):
-            pass
+            update_password(email, password)
+            return redirect("/")
         else:
             return render_template("/user/active-code.html", form=form, nocode=True)
         update_password(email, code, password)
