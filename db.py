@@ -18,11 +18,11 @@ def check_code(email, code):
     data = cur.execute(sql).fetchall()
     cur.close()
     conn.close()
+    print(data[0][0])
     if data[0][0] == code:
         return True
     else:
         return False
-    print(data[0][0])
 
 
 def delete_last_code(email):
@@ -30,8 +30,9 @@ def delete_last_code(email):
     cur = conn.cursor()
     sql = f'DELETE FROM forget_password WHERE email="{email}"'
     cur.execute(sql)
-    cur.close()
+    conn.commit()
     conn.close()
+    print("Удалено")
 
 
 def add_code(email, code):

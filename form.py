@@ -3,6 +3,7 @@ from wtforms import StringField, SelectField, SubmitField, PasswordField, Boolea
 from wtforms.validators import DataRequired, EqualTo, Length, Email
 from wtforms.fields.html5 import EmailField
 
+
 class InventoryForm(FlaskForm):
     category = StringField("Номер категории", validators=[DataRequired()])
     categoryName = StringField("Название категории", validators=[DataRequired()])
