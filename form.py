@@ -21,7 +21,7 @@ class CustomLoginForm(FlaskForm):
     password = PasswordField("Пароль", validators=[DataRequired()])
     submit = SubmitField("Войти")
 
-
+# не использовал
 class UserUpdateInfo(FlaskForm):
     new_password = PasswordField("Новый пароль", validators=[DataRequired(), Length(min=5)])
     new_password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired(), EqualTo(new_password)])
@@ -42,3 +42,18 @@ class RegisterNewUser(FlaskForm):
     can_delete = BooleanField("Удаление данных")
     can_add_users = BooleanField("Добавление пользователей")
     submit = SubmitField("Добавить")
+
+
+class ForgetPassword(FlaskForm):
+    name = StringField("Имя пользователя")
+    email = StringField("Почта")
+    submit = SubmitField("Востановить")
+
+
+class RenewPasswordWithCode(FlaskForm):
+    code = StringField("Код в сообщение", validators=[DataRequired()])
+    password = PasswordField("Новый пароль", validators=[DataRequired(),
+                                                         Length(min=5, message="Пароль слишком короткий"),
+                                                         EqualTo("password_repeat", message="Пароли не совпадают")])
+    password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
+    submit = SubmitField("Обновить пароль")
