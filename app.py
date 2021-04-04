@@ -4,15 +4,14 @@ from form import *
 from db import *
 import hashlib
 
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "very-secret-key--no-one-can-know-it"
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'denis150105ddd@gmail.com'  # введите свой адрес электронной почты здесь
-app.config['MAIL_DEFAULT_SENDER'] = 'denis150105ddd@gmail.com'  # и здесь
-app.config['MAIL_PASSWORD'] = '150105dd'  # введите пароль
+app.config['MAIL_USERNAME'] = 'denis150105ddd@gmail.com'
+app.config['MAIL_DEFAULT_SENDER'] = 'denis150105ddd@gmail.com'
+app.config['MAIL_PASSWORD'] = '150105dd'
 mail = Mail(app)
 
 
@@ -91,22 +90,6 @@ def forget_password():
     return render_template("/user/forget_password.html", form=form, error=False)
 
 
-@app.route("/email/")
-def email():
-    msg = Message("Test", recipients=["denis150105ddd@yandex.ru"])
-    msg.html = "<h1>Test</h1>"
-    mail.send(msg)
-
-
-# @app.route("/all-users/", methods=["get", "post"])
-# def all_users():
-#     data = all_users()
-#     if request.method == "POST":
-#         name = request.form.get("name")
-#         delete_user(name)
-#     return render_template("/user/all-users.html", data=data)
-
-
 @app.route("/user/")
 def user():
     if is_auth():
@@ -118,8 +101,8 @@ def user():
 @app.route("/register/", methods=["post", "get"])
 def register():
     if is_auth():
-        form = RegisterNewUser()
         if session.get("can_add_users") == "true":
+            form = RegisterNewUser()
             if form.validate_on_submit():
                 name = form.name.data
                 password = hashlib.md5(str(form.password.data).encode())
@@ -137,7 +120,7 @@ def register():
                 add_user(name, password, can_view, can_add, can_delete, can_add_users, email, real_name, surname)
             return render_template("/user/register.html", form=form, user_added=False)
         else:
-            render_template("non_privilege.html")
+            abort(302)
     else:
         return redirect("/login/")
 
@@ -188,7 +171,7 @@ def inventory():
             else:
                 return render_template("/inventory/index.html", form=form, title="Внесение данных")
         else:
-            return render_template("non_privilege.html")
+            return render_template("/inventory/index.html", form=form, title="Внесение данных")
     else:
         return redirect("/login/")
 
@@ -217,7 +200,8 @@ def order_by_place(place):
             if len(data) == 0:
                 empty = True
             print(data)
-            return render_template("/inventory/view/place.html", data=data, title="Инвентарь помещения {}".format(place), empty=empty)
+            return render_template("/inventory/view/place.html", data=data,
+                                   title="Инвентарь помещения {}".format(place), empty=empty)
         else:
             return render_template("non_privilege.html")
     else:
@@ -230,9 +214,10 @@ def order_by_category(category):
         if session.get("can_view") == "true":
             empty = False
             data = from_db_order_by_category(category)
-            if len(data)  == 0:
+            if len(data) == 0:
                 empty = True
-            return render_template("/inventory/view/category.html", data=data, title="Товары категории {}".format(category), empty=empty)
+            return render_template("/inventory/view/category.html", data=data,
+                                   title="Товары категории {}".format(category), empty=empty)
         else:
             return render_template("non_privilege.html")
     else:

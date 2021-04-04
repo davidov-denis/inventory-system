@@ -1,28 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block PageContent %}
     {% if user_added %}
         <script>
             alert("Пользователь существует")
         </script>
     {% endif %}
-    <form action="" method="post">
-        <div>
-            {{ form.csrf_token }}
-        </div>
-        {% for field in form if field.name != "csrf_token" %}
+    {% if session["can_add_users"] == "true" %}
+        <form action="" method="post">
             <div>
-                {{ field.label() }}
-                {{ field() }}
-                {% for error in field.errors %}
-                    <div style="color: red">{{ error }}</div>
-                {% endfor %}
+                {{ form.csrf_token }}
             </div>
-        {% endfor %}
-    </form>
-</body>
-</html>
+            {% for field in form if field.name != "csrf_token" %}
+                <div>
+                    {{ field.label() }}
+                    {{ field() }}
+                    {% for error in field.errors %}
+                        <div style="color: red">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </form>
+    {% else %}
+        <p>У вас не достаточно прав</p>
+    {% endif %}
+{% endblock %}

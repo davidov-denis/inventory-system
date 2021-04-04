@@ -1,17 +1,21 @@
 {% extends "inventory_base.html" %}
 {% block content %}
-    <form action="" method="post">
-        <div>
-            {{ form.csrf_token }}
-        </div>
-        {% for field in form if field.name != "csrf_token" %}
+    {% if session["can_add"] == "true" %}
+        <form action="" method="post">
             <div>
-                {{ field.label() }}
-                {{ field() }}
-                {% for error in field.errors %}
-                    <div>{{ error }}</div>
-                {% endfor %}
+                {{ form.csrf_token }}
             </div>
-        {% endfor %}
-    </form>
+            {% for field in form if field.name != "csrf_token" %}
+                <div>
+                    {{ field.label() }}
+                    {{ field() }}
+                    {% for error in field.errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </form>
+    {% else %}
+        <p>Вы не можете добавлять инвентарь. Если это не так обратитесь к администратору</p>
+    {% endif %}
 {% endblock %}

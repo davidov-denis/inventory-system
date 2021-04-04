@@ -7,23 +7,26 @@
         <title>{{ title }}</title>
     </head>
     <body>
-        <script>
-            function to_place(){
-                place = document.getElementById("place").value
-                return document.location.href = `/inventory/view/order-by-place/${place}`
-            };
-            function to_category(){
-                category = document.getElementById("category").value
-                return document.location.href = `/inventory/view/order-by-category/${category}`
-            }
-        </script>
-        <ul class="menu">
-            <li><a href="/inventory/">Внести данные</a></li>
-            <li><a href="/inventory/view/">Все наименования</a></li>
-            <li><input type="text" id="place" placeholder="Введитe место"><button class="btn btn-success" onclick="to_place()">Перейти</button></li>
-            <li><input type="text" id="category" placeholder="Введите категорию или номер категории"><button class="btn btn-success" onclick="to_category()">Перейти</button></li>
-        </ul>
-        {% block content %}
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/user/">Личная страница<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inventory/">Инвентаризация</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% block PageContent %}
         {% endblock %}
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
