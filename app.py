@@ -222,7 +222,7 @@ def view_table():
                 empty = True
             return render_template("/inventory/view/all.html", data=data, title="Просмотр всей таблицы", empty=empty)
         else:
-            return render_template("non_privilege.html")
+            return redirect("/inventory/")
     else:
         return redirect("/login/")
 
@@ -230,15 +230,12 @@ def view_table():
 @app.route("/inventory/view/order-by-place/<place>/")
 def order_by_place(place):
     if is_auth():
-        if session.get("can_view") == "true":
-            empty = False
-            data = from_db_order_by_place(place)
-            if len(data) == 0:
-                empty = True
-            return render_template("/inventory/view/place.html", data=data,
-                                   title="Инвентарь помещения {}".format(place), empty=empty)
-        else:
-            return render_template("non_privilege.html")
+        empty = False
+        data = from_db_order_by_place(place)
+        if len(data) == 0:
+            empty = True
+        return render_template("/inventory/view/place.html", data=data,
+                                title="Инвентарь помещения {}".format(place), empty=empty)
     else:
         return redirect("/login/")
 
