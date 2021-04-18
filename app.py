@@ -1,18 +1,17 @@
 from flask_mail import Mail, Message
-from config import *
 from flask import *
 from form import *
 from db import *
 import hashlib
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = SECRET_KEY
+app.config["SECRET_KEY"] = "very-secret-key--no-one-can-know-it"
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = MAIL_USERNAME
-app.config['MAIL_DEFAULT_SENDER'] = MAIL_DEFAULT_SENDER
-app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
+app.config['MAIL_USERNAME'] = "denis150105ddd@gmail.com"
+app.config['MAIL_DEFAULT_SENDER'] = "denis150105ddd@gmail.com"
+app.config['MAIL_PASSWORD'] = "тут пароль но я его не буду сюда писать"
 mail = Mail(app)
 
 
@@ -93,9 +92,8 @@ def active_code(email):
 def forget_password():
     form = ForgetPassword()
     if form.validate_on_submit():
-        name = form.name.data
         email = form.email.data
-        email = chek_name__or_email(name, email)
+        email = chek_name__or_email(email)
         if email:
             code = random_code()
             delete_last_code(email)

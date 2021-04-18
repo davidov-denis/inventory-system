@@ -27,12 +27,20 @@
                         <td>{% if dat[4] == "true" %}Да{% else %}Нет{% endif %}</td>
                         <td>{% if dat[5] == "true" %}Да{% else %}Нет{% endif %}</td>
                         <td>
-                            {% if dat[0] != session["name"] %}
-                                <form action="/delete-user/{{ dat[6] }}">
-                                    <button type="submit" class="btn btn-danger">Удалить</button>
-                                </form>
+                            {% if session["can_add_users"] %}
+                                {% if dat[0] != session["name"] %}
+                                    {% if dat[0] != "denis" %}
+                                        <form action="/delete-user/{{ dat[6] }}">
+                                            <button type="submit" class="btn btn-danger">Удалить</button>
+                                        </form>
+                                    {% else %}
+                                        Это бог его нельзя удалить
+                                    {% endif %}
+                                {% else %}
+                                    <p>Вы не можете себя удалить</p>
+                                {% endif %}
                             {% else %}
-                                <p>Вы не можете себя удалить</p>
+                                <th>Не можешь</th>
                             {% endif %}
                         </td>
                     </tr>

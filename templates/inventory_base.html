@@ -13,7 +13,7 @@
     </script>
     <ul class="menu pt-2">
         <li><a href="/inventory/">Внести данные</a></li>
-        {% if session["can_add"] == "true" %}
+        {% if session["can_view"] == "true" %}
             <li><a href="/inventory/view/">Все наименования</a></li>
             <li><input type="text" id="place" placeholder="Введитe место">
                 <button class="btn btn-success" onclick="to_place()">Перейти</button>

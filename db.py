@@ -42,10 +42,10 @@ def add_code(email: str, code: str):
     conn.close()
 
 # плохо работает
-def chek_name__or_email(name: str, email: str) -> bool:
+def chek_name__or_email(email: str) -> bool:
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    sql = f'SELECT * FROM users WHERE name="{name}" OR email="{email}"'
+    sql = f'SELECT * FROM users WHERE email="{email}"'
     data = cur.execute(sql).fetchall()
     cur.close()
     conn.close()
@@ -135,6 +135,6 @@ def from_db() -> list:
 def to_db(category: str, categoryName: str, number: str, number_name: str, place: str):
     conn = sqlite3.connect("db.sqlite")
     cur = conn.cursor()
-    cur.execute("INSERT INTO inventory VALUES (?, ?, ?, ?, ?)", (category, categoryName, number, number_name, place))
+    cur.execute("INSERT INTO inventory VALUES (?, ?, ?, ?, ?, NULL)", (category, categoryName, number, number_name, place))
     conn.commit()
     conn.close()

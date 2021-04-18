@@ -48,7 +48,6 @@ class RegisterNewUser(FlaskForm):
 
 
 class ForgetPassword(FlaskForm):
-    name = StringField("Имя пользователя")
     email = StringField("Почта")
     submit = SubmitField("Востановить")
 
