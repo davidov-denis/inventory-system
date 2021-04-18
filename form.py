@@ -22,10 +22,12 @@ class CustomLoginForm(FlaskForm):
     password = PasswordField("Пароль", validators=[DataRequired()])
     submit = SubmitField("Войти")
 
-# не использовал
+
 class UserUpdateInfo(FlaskForm):
-    new_password = PasswordField("Новый пароль", validators=[DataRequired(), Length(min=5)])
-    new_password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired(), EqualTo(new_password)])
+    new_password = PasswordField("Новый пароль", validators=[DataRequired(),
+                                                         Length(min=5, message="Пароль слишком короткий"),
+                                                         EqualTo("new_password_repeat", message="Пароли не совпадают")])
+    new_password_repeat = PasswordField("Подтвердите пароль", validators=[DataRequired()])
     submit = SubmitField("Обновить пароль")
 
 

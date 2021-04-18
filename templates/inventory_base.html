@@ -1,23 +1,32 @@
 {% extends "base.html" %}
 {% block PageContent %}
     <script>
-        function to_place(){
+        function to_place() {
             place = document.getElementById("place").value
             return document.location.href = `/inventory/view/order-by-place/${place}`
         };
-        function to_category(){
+
+        function to_category() {
             category = document.getElementById("category").value
             return document.location.href = `/inventory/view/order-by-category/${category}`
-        }
+        };
     </script>
     <ul class="menu pt-2">
         <li><a href="/inventory/">Внести данные</a></li>
         <li><a href="/inventory/view/">Все наименования</a></li>
-        <li><input type="text" id="place" placeholder="Введитe место"><button class="btn btn-success" onclick="to_place()">Перейти</button></li>
-        <li><input type="text" id="category" placeholder="Введите категорию или номер категории"><button class="btn btn-success" onclick="to_category()">Перейти</button></li>
+        <li><input type="text" id="place" placeholder="Введитe место">
+            <button class="btn btn-success" onclick="to_place()">Перейти</button>
+        </li>
+        <li><input type="text" id="category" placeholder="Введите категорию или номер категории">
+            <button class="btn btn-success" onclick="to_category()">Перейти</button>
+        </li>
     </ul>
     {% block content %}
-    {% endblock content%}
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    {% endblock content %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
 {% endblock PageContent %}

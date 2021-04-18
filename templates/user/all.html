@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block PageContent %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-reflow">
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Электронный адрес</th>
+                    <th>Логин</th>
+                    <th>Разрещён просмотр</th>
+                    <th>Может добавлять</th>
+                    <th>Может удалять</th>
+                    <th>Может добавлять пользователей</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dat in data %}
+                    <tr>
+                        <td>{{ dat[7] }}</td>
+                        <td>{{ dat[8] }}</td>
+                        <td>{{ dat[6] }}</td>
+                        <td>{{ dat[0] }}</td>
+                        <td>{% if dat[2] == "true" %}Да{% else %}Нет{% endif %}</td>
+                        <td>{% if dat[3] == "true" %}Да{% else %}Нет{% endif %}</td>
+                        <td>{% if dat[4] == "true" %}Да{% else %}Нет{% endif %}</td>
+                        <td>{% if dat[5] == "true" %}Да{% else %}Нет{% endif %}</td>
+                        <td>
+                            {% if dat[0] != session["name"] %}
+                                <form action="/delete-user/{{ dat[6] }}">
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                </form>
+                            {% else %}
+                                <p>Вы не можете себя удалить</p>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endblock %}

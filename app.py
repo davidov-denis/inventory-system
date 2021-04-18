@@ -1,17 +1,18 @@
 from flask_mail import Mail, Message
+from config import *
 from flask import *
 from form import *
 from db import *
 import hashlib
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "very-secret-key--no-one-can-know-it"
+app.config["SECRET_KEY"] = SECRET_KEY
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'denis150105ddd@gmail.com'
-app.config['MAIL_DEFAULT_SENDER'] = 'denis150105ddd@gmail.com'
-app.config['MAIL_PASSWORD'] = '150105dd'
+app.config['MAIL_USERNAME'] = MAIL_USERNAME
+app.config['MAIL_DEFAULT_SENDER'] = MAIL_DEFAULT_SENDER
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 mail = Mail(app)
 
 
@@ -54,6 +55,25 @@ def update_session(user):
     session["surname"] = user[8]
 
 
+@app.route("/all-users/")
+def all_users_view():
+    if is_auth():
+        print(session["name"])
+        data = all_users()
+        return render_template("/user/all.html", data=data)
+    else:
+        return redirect("/")
+
+
+@app.route("/delete-user/<email>/")
+def delete_user_view(email):
+    if is_auth():
+        delete_user(email)
+        return redirect("/all-users/")
+    else:
+        return redirect("/")
+
+
 @app.route("/forget-password/active-code/<email>", methods=["post", "get"])
 def active_code(email):
     form = RenewPasswordWithCode()
@@ -66,7 +86,6 @@ def active_code(email):
             return redirect("/")
         else:
             return render_template("/user/active-code.html", form=form, nocode=True)
-        update_password(email, code, password)
     return render_template("/user/active-code.html", form=form, nocode=False)
 
 
@@ -90,10 +109,18 @@ def forget_password():
     return render_template("/user/forget_password.html", form=form, error=False)
 
 
-@app.route("/user/")
+
+@app.route("/user/", methods=["post", "get"])
 def user():
     if is_auth():
-        return render_template("/user/user.html")
+        form = UserUpdateInfo()
+        if form.validate_on_submit():
+            password = hashlib.md5(str(form.new_password.data).encode())
+            password = password.hexdigest()
+            email = session.get("email")
+            update_password(email, password)
+            return redirect("/logout/")
+        return render_template("/user/user.html", form=form)
     else:
         return redirect("/login/")
 
@@ -134,7 +161,6 @@ def logout():
 @app.route("/", methods=["post", "get"])
 @app.route("/login/", methods=["post", "get"])
 def login():
-    print(request.path)
     if is_auth():
         return redirect("/user/")
     else:
@@ -176,6 +202,16 @@ def inventory():
         return redirect("/login/")
 
 
+@app.route("/inventory/delete/<id>", methods=["post", "get"])
+def delete_inventory_view(id: int):
+    if is_auth():
+        id = int(id)
+        delete_inventory(id)
+        return redirect("/inventory/view")
+    else:
+        return redirect("/")
+
+
 @app.route("/inventory/view/")
 def view_table():
     if is_auth():
@@ -199,7 +235,6 @@ def order_by_place(place):
             data = from_db_order_by_place(place)
             if len(data) == 0:
                 empty = True
-            print(data)
             return render_template("/inventory/view/place.html", data=data,
                                    title="Инвентарь помещения {}".format(place), empty=empty)
         else:
