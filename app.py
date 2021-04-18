@@ -215,14 +215,11 @@ def delete_inventory_view(id: int):
 @app.route("/inventory/view/")
 def view_table():
     if is_auth():
-        if session.get("can_view") == "true":
-            data = from_db()
-            empty = False
-            if len(data) == 0:
-                empty = True
-            return render_template("/inventory/view/all.html", data=data, title="Просмотр всей таблицы", empty=empty)
-        else:
-            return redirect("/inventory/")
+        data = from_db()
+        empty = False
+        if len(data) == 0:
+            empty = True
+        return render_template("/inventory/view/all.html", data=data, title="Просмотр всей таблицы", empty=empty)
     else:
         return redirect("/login/")
 
@@ -243,15 +240,12 @@ def order_by_place(place):
 @app.route("/inventory/view/order-by-category/<category>/")
 def order_by_category(category):
     if is_auth():
-        if session.get("can_view") == "true":
-            empty = False
-            data = from_db_order_by_category(category)
-            if len(data) == 0:
-                empty = True
-            return render_template("/inventory/view/category.html", data=data,
-                                   title="Товары категории {}".format(category), empty=empty)
-        else:
-            return render_template("non_privilege.html")
+        empty = False
+        data = from_db_order_by_category(category)
+        if len(data) == 0:
+            empty = True
+        return render_template("/inventory/view/category.html", data=data,
+                                title="Товары категории {}".format(category), empty=empty)
     else:
         return redirect("/login/")
 
